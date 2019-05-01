@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Modal, ModalHeader, ModalBody, FormGroup, Label, NavbarBrand } from 'reactstrap'
 
 const photos = [
     { src: '/images/boy.png' },
@@ -71,30 +72,107 @@ export default class MainPage extends Component {
         }))
     }
 
+    toggle = () => {
+        this.setState(prevState => ({
+          modalIsOpen: !prevState.modalIsOpen
+        }));
+      }
+
 
     render() {
+        const image = photos[this.state.currentImage]
+        const baseImage = new Image()
+        baseImage.src = image.src
+        // To avoid stretching and compressing each image, fix the aspect ratio.
+        // Fix the width to 600 and calculate height based on width-height ratio
+        const wrh = baseImage.width / baseImage.height
+        const newWidth = 600
+        const newHeight = newWidth / wrh
+        const textStyle = {
+            fontFamily: "Impact",
+            fontSize: "50px",
+            textTransform: "uppercase",
+            fill: "#FFF",
+            stroke: "#000",
+            userSelect: "none"
+        }
+
+
         return (
             <div className="content">
                 {/* Create the image gallery here! */}
                 {photos.map((image, index) => (
-                <div className="image-holder" key={image.src}>
-                    <span className="meme-top-caption">Top text</span>
-                    <img
-                        style={{
-                            width: "100%",
-                            cursor: "pointer",
-                            height: "100%"
-                        }}
-                        alt={index}
-                        src={image.src}
-                        // The onClick here determines current image
-                        onClick={() => this.openImage(index)}
-                        role="presentation"
-                    />
-                    <span className="meme-bottom-caption">Bottom text</span>
-                </div>
+                    <div className="image-holder" key={image.src}>
+                        <span className="meme-top-caption">Top text</span>
+                        <img
+                            style={{
+                                width: "100%",
+                                cursor: "pointer",
+                                height: "100%"
+                            }}
+                            alt={index}
+                            src={image.src}
+                            // The onClick here determines current image
+                            onClick={() => this.openImage(index)}
+                            role="presentation"
+                        />
+                        <span className="meme-bottom-caption">Bottom text</span>
+                    </div>
                 ))}
-    
+
+                {/*  The workstation/modal for meme creation */}
+                <Modal className="meme-gen-modal" isOpen={this.state.modalIsOpen}>
+                    <ModalHeader toggle={this.toggle}>Make-a-Meme</ModalHeader>
+                    <ModalBody>
+                        <svg
+                            width={newWidth}
+                            id="svg_ref"
+                            height={newHeight}
+                            ref={el => { this.svgRef = el }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlnsXlink="http://www.w3.org/1999/xlink">
+                            <image
+                                ref={el => { this.imageRef = el }}
+                                xlinkHref={this.state.currentImageBase64}
+                                height={newHeight}
+                                width={newWidth}
+                            />
+                            <text
+                                style={{ ...textStyle, zIndex: this.state.isTopDragging ? 4 : 1 }}
+                                x={this.state.topX}
+                                y={this.state.topY}
+                                dominantBaseline="middle"
+                                textAnchor="middle"
+                                onMouseDown={event => this.handleMouseDown(event, 'top')}
+                                onMouseUp={event => this.handleMouseUp(event, 'top')}
+                            >
+                                {this.state.toptext}
+                            </text>
+                            <text
+                                style={textStyle}
+                                dominantBaseline="middle"
+                                textAnchor="middle"
+                                x={this.state.bottomX}
+                                y={this.state.bottomY}
+                                onMouseDown={event => this.handleMouseDown(event, 'bottom')}
+                                onMouseUp={event => this.handleMouseUp(event, 'bottom')}
+                            >
+                                {this.state.bottomtext}
+                            </text>
+                        </svg>
+                        <div className="meme-form">
+                            <FormGroup>
+                                <Label for="toptext">Top Text</Label>
+                                <input className="form-control" type="text" name="toptext" id="toptext" placeholder="Add text to the top" onChange={this.changeText} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="bottomtext">Bottom Text</Label>
+                                <input className="form-control" type="text" name="bottomtext" id="bottomtext" placeholder="Add text to the bottom" onChange={this.changeText} />
+                            </FormGroup>
+                            <button onClick={() => this.convertSvgToImage()} className="btn btn-primary">Download Meme!</button>
+                        </div>
+                    </ModalBody>
+                </Modal>
             </div>
         )
     }
