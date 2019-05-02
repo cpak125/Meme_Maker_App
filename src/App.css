@@ -42,10 +42,9 @@ html, body {
   color: #FFF;
 }
 
-.meme-gen-modal {
+.meme-gen-modal{
   max-width: fit-content;
 }
-
 .modal-body {
   display: flex;
   border-radius: 0px;
@@ -54,13 +53,13 @@ html, body {
 }
 
 .modal-header {
+  width: inherit;
   background-color: rgba( 246, 245, 243, 1.00 );
 }
 
 .meme-form {
   margin-left: 20px;
-  padding-left: 20px;
-  width: 300px;
+  width: 150px;
   border-left: 1px solid #e9ecef;
 }
 
@@ -111,6 +110,7 @@ html, body {
 .content {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   margin-top: 10px;
 }
 
