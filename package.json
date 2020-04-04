@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.4.1",
-    "handlebars": "^4.7.3",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "react-scripts": "3.4.0",
+    "handlebars": "^4.7.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
     "reactstrap": "^8.4.1"
   },
   "scripts": {
