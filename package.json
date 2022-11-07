@@ -1,9 +1,6 @@
 {
   "name": "meme_maker_app",
   "version": "0.1.0",
-  "engines": {
-    "node": "18.0.0"
-  },
   "private": true,
   "dependencies": {
     "bootstrap": "^4.6.0",
